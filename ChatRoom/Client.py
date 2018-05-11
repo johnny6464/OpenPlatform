@@ -7,6 +7,10 @@ class Client:
         self.sock = sock
         self.sock.connect((host, port))
         self.sock.send(b'1')
+        print(self.sock.recv(1024).decode())
+        myname = input()
+        self.sock.send(myname.encode())
+        print(self.sock.recv(1024).decode())
 
     def sendThreadFunc(self):
         while True:
@@ -21,8 +25,8 @@ class Client:
     def recvThreadFunc(self):
         while True:
             try:
-                otherword = self.sock.recv(1024) # socket.recv(recv_size)
-                print(otherword.decode())
+                otherword = self.sock.recv(1024).decode() # socket.recv(recv_size)
+                print(otherword)
             except ConnectionAbortedError:
                 print('Server closed this connection!')
 

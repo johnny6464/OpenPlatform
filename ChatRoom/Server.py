@@ -16,7 +16,6 @@ class Server:
     def checkConnection(self):
         connection, addr = self.sock.accept()
         print('Accept a new connection', connection.getsockname(), connection.fileno())
-
         try:
             buf = connection.recv(1024).decode()
             if buf == '1':
@@ -24,7 +23,6 @@ class Server:
                 mythread = threading.Thread(target=self.subThreadIn, args=(connection, connection.fileno()))
                 mythread.setDaemon(True)
                 mythread.start()
-
             else:
                 connection.send(b'please go out!')
                 connection.close()
@@ -42,6 +40,10 @@ class Server:
 
     def subThreadIn(self, myconnection, connNumber):
         self.mylist.append(myconnection)
+        myconnection.send(b'Input your nickname:')
+        name = myconnection.recv(1024).decode()
+        myconnection.send(b'Now Lets Chat, ' + name.encode())
+        self.tellOthers(connNumber, 'SYSTEM: ' + name + ' in the chat room')
         while True:
             try:
                 recvedMsg = myconnection.recv(1024).decode()
@@ -53,6 +55,7 @@ class Server:
             except (OSError, ConnectionResetError):
                 try:
                     self.mylist.remove(myconnection)
+                    self.tellOthers(connNumber, name + ' is out')
                 except:
                     pass
 
