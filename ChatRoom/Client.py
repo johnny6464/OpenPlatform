@@ -1,5 +1,6 @@
 import socket
 import threading
+import datetime
 
 class Client:
     def __init__(self, host, port):
@@ -13,9 +14,10 @@ class Client:
         print(self.sock.recv(1024).decode())
 
     def sendThreadFunc(self):
+        x = datetime.datetime.now()
         while True:
             try:
-                myword = input()
+                myword = input() + "                             [" + str(x.hour) + ":" + str(x.minute) + ":" + str(x.second) + "]"
                 self.sock.send(myword.encode())
             except ConnectionAbortedError:
                 print('Server closed this connection!')

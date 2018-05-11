@@ -23,6 +23,7 @@ class Server:
                 mythread = threading.Thread(target=self.subThreadIn, args=(connection, connection.fileno()))
                 mythread.setDaemon(True)
                 mythread.start()
+                connection.send(b'Welcome to chat room!') #add by ryan851109
             else:
                 connection.send(b'please go out!')
                 connection.close()
