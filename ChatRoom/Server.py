@@ -23,7 +23,7 @@ class Server:
                 mythread = threading.Thread(target=self.subThreadIn, args=(connection, connection.fileno()))
                 mythread.setDaemon(True)
                 mythread.start()
-                connection.send(b'Welcome to chat room!') #add by ryan851109
+                connection.send(b'Welcome to chat room!')
             else:
                 connection.send(b'please go out!')
                 connection.close()
@@ -31,11 +31,11 @@ class Server:
             pass
 
     # send whatToSay to every except people in exceptNum
-    def tellOthers(self, exceptNum, whatToSay):
+    def tellOthers(self, exceptNum, whatToSay, name):
         for c in self.mylist:
             if c.fileno() != exceptNum:
                 try:
-                    c.send(whatToSay.encode())
+                    c.send(name.encode() + b': ' + whatToSay.encode() + b'      people: ' + str(len(self.mylist)).encode())
                 except:
                     pass
 
@@ -44,19 +44,19 @@ class Server:
         myconnection.send(b'Input your nickname:')
         name = myconnection.recv(1024).decode()
         myconnection.send(b'Now Lets Chat, ' + name.encode())
-        self.tellOthers(connNumber, 'SYSTEM: ' + name + ' in the chat room')
+        self.tellOthers(connNumber, 'SYSTEM: ' + name + ' in the chat room',name)
         while True:
             try:
                 recvedMsg = myconnection.recv(1024).decode()
                 if recvedMsg:
-                    self.tellOthers(connNumber, recvedMsg)
+                    self.tellOthers(connNumber, recvedMsg, name)
                 else:
                     pass
 
             except (OSError, ConnectionResetError):
                 try:
                     self.mylist.remove(myconnection)
-                    self.tellOthers(connNumber, name + ' is out')
+                    self.tellOthers(connNumber, name + ' is out',name)
                 except:
                     pass
 
