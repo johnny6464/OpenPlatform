@@ -6,16 +6,15 @@ import sys
 from PyQt5.QtWidgets import QMainWindow, QApplication
 
 class Client:
-    def __init__(self, host, port, name):
+    def __init__(self, host, port ,window):
         sock = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
         self.sock = sock
         self.sock.connect((host, port))
         self.sock.send(b'1')
         self.sock.recv(1024).decode()
-        self.sock.send(name.encode())
         myname = self.sock.recv(1024).decode()
-        Main.txtBrowser.append(myname)
-        Main.txtBrowser.update()
+        window.txtBrowser.append(myname)
+        window.txtBrowser.update()
 
     def sendThreadFunc(self):
         x = datetime.datetime.now()
@@ -54,19 +53,19 @@ class Main(QMainWindow,  mainwindow.Ui_MainWindow):
         self.txtInput.setFocus()
 
     def start(self):
-        # myname = self.txtName.text()
+        myname = self.txtName.text()
         self.btnLogin.setEnabled(False)
         self.txtName.setEnabled(False)
         self.btnSend.setEnabled(True)
         self.txtInput.setEnabled(True)
-        # c = Client('localhost', 5550, name)
-        # th1 = threading.Thread(target=c.sendThreadFunc)
-        # th2 = threading.Thread(target=c.recvThreadFunc)
-        # threads = [th1, th2]
-        # for t in threads:
-        #     t.setDaemon(True)
-        #     t.start()
-        # t.join()
+        c = Client('localhost', 5550,self)
+        th1 = threading.Thread(target=c.sendThreadFunc)
+        th2 = threading.Thread(target=c.recvThreadFunc)
+        threads = [th1, th2]
+        #for t in threads:
+            #t.setDaemon(True)
+            #t.start()
+        #t.join()
 
 if __name__ == "__main__":
     app = QApplication(sys.argv)

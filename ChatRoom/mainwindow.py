@@ -28,7 +28,7 @@ class Ui_MainWindow(object):
         self.label = QtWidgets.QLabel(self.centralwidget)
         self.label.setGeometry(QtCore.QRect(10, 20, 61, 31))
         self.label.setObjectName("label")
-        self.txtName = QtWidgets.QTextEdit(self.centralwidget)
+        self.txtName = QtWidgets.QLineEdit(self.centralwidget)
         self.txtName.setGeometry(QtCore.QRect(70, 0, 181, 61))
         self.txtName.setObjectName("txtName")
         self.btnLogin = QtWidgets.QPushButton(self.centralwidget)
