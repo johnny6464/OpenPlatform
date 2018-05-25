@@ -20,9 +20,11 @@ class Ui_MainWindow(object):
         self.txtInput = QtWidgets.QLineEdit(self.centralwidget)
         self.txtInput.setGeometry(QtCore.QRect(0, 250, 391, 31))
         self.txtInput.setObjectName("txtInput")
+        self.txtInput.setEnabled(False)
         self.btnSend = QtWidgets.QPushButton(self.centralwidget)
         self.btnSend.setGeometry(QtCore.QRect(0, 280, 391, 31))
         self.btnSend.setObjectName("btnSend")
+        self.btnSend.setEnabled(False)
         self.label = QtWidgets.QLabel(self.centralwidget)
         self.label.setGeometry(QtCore.QRect(10, 20, 61, 31))
         self.label.setObjectName("label")
@@ -31,14 +33,10 @@ class Ui_MainWindow(object):
         self.txtName.setObjectName("txtName")
         self.btnLogin = QtWidgets.QPushButton(self.centralwidget)
         self.btnLogin.setGeometry(QtCore.QRect(250, 0, 141, 61))
-        self.btnLogin.setStyleSheet("#txtlogin\n"
-"{\n"
-"    selection-color: rgb(255, 255, 127);\n"
-"}\n"
-"")
         self.btnLogin.setCheckable(False)
         self.btnLogin.setChecked(False)
         self.btnLogin.setObjectName("btnLogin")
+        self.btnLogin
         MainWindow.setCentralWidget(self.centralwidget)
         self.menubar = QtWidgets.QMenuBar(MainWindow)
         self.menubar.setGeometry(QtCore.QRect(0, 0, 394, 22))
@@ -56,9 +54,8 @@ class Ui_MainWindow(object):
 
     def retranslateUi(self, MainWindow):
         _translate = QtCore.QCoreApplication.translate
-        MainWindow.setWindowTitle(_translate("MainWindow", "MainWindow"))
+        MainWindow.setWindowTitle(_translate("MainWindow", "Chat  Application"))
         self.btnSend.setText(_translate("MainWindow", "Send"))
         self.label.setText(_translate("MainWindow", "<html><head/><body><p>NickName:</p></body></html>"))
         self.btnLogin.setText(_translate("MainWindow", "Login"))
-        self.menuChat_Application.setTitle(_translate("MainWindow", "Chat Application"))
 

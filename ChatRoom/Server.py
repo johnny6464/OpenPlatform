@@ -41,7 +41,7 @@ class Server:
 
     def subThreadIn(self, myconnection, connNumber):
         self.mylist.append(myconnection)
-        myconnection.send(b'Input your nickname:')
+        myconnection.send(b'1')
         name = myconnection.recv(1024).decode()
         myconnection.send(b'Now Lets Chat, ' + name.encode())
         self.tellOthers(connNumber, 'SYSTEM: ' + name + ' in the chat room',name)
