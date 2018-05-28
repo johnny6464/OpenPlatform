@@ -3,72 +3,84 @@ import threading
 import datetime
 import mainwindow
 import sys
+import time
 from PyQt5.QtWidgets import QMainWindow, QApplication
+from PyQt5.QtCore import QThread, pyqtSignal
 
-class Client:
-    def __init__(self, host, port ,window):
+
+class ClientRecv(QThread):
+    recvmsg = pyqtSignal(str)
+
+    def __init__(self, host, port, name):
+        QThread.__init__(self)
         sock = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
         self.sock = sock
         self.sock.connect((host, port))
         self.sock.send(b'1')
-        self.sock.recv(1024).decode()
-        myname = self.sock.recv(1024).decode()
-        window.txtBrowser.append(myname)
-        window.txtBrowser.update()
+        time.sleep(1)
+        self.sock.send(name.encode())
 
-    def sendThreadFunc(self):
-        x = datetime.datetime.now()
+    def __del__(self):
+        self.wait()
+
+    def run(self):
         while True:
-            try:
-                myword = input() + "                             [" + str(x.hour) + ":" + str(x.minute) + ":" + str(x.second) + "]"
-                self.sock.send(myword.encode())
-            except ConnectionAbortedError:
-                print('Server closed this connection!')
-            except ConnectionResetError:
-                print('Server is closed!')
+            otherword = self.sock.recv(1024).decode()
+            self.recvmsg.emit(otherword)
 
-    def recvThreadFunc(self):
-        while True:
-            try:
-                otherword = self.sock.recv(1024).decode() # socket.recv(recv_size)
-                print(otherword)
-            except ConnectionAbortedError:
-                print('Server closed this connection!')
+    def send(self, myword):
+        try:
+            self.sock.send(myword.encode())
+        except ConnectionAbortedError:
+            print('Server closed this connection!')
+        except ConnectionResetError:
+            print('Server is closed!')
 
-            except ConnectionResetError:
-                print('Server is closed!')
 
-class Main(QMainWindow,  mainwindow.Ui_MainWindow):
+class MainWindow(QMainWindow, mainwindow.Ui_MainWindow):
     def __init__(self):
-        super(self.__class__,self).__init__()
+        super(self.__class__, self).__init__()
         self.setupUi(self)
+        self.name = None
+        self.client = None
+        self.time = None
+        self.btnLogin.clicked.connect(self.login)
         self.btnSend.clicked.connect(self.send)
-        self.btnLogin.clicked.connect(self.start)
+        self.txtName.setFocus()
+
+    def login(self):
+        self.txtName.setFocus()
+        if self.txtName.text():
+            self.name = self.txtName.text()
+            self.btnLogin.setEnabled(False)
+            self.txtName.setEnabled(False)
+            self.btnSend.setEnabled(True)
+            self.txtInput.setEnabled(True)
+            self.txtInput.setFocus()
+            self.txtBrowser.append("Welcome to chat room! " + self.name)
+            self.txtBrowser.append("Now Lets Chat,  " + self.name)
+            self.client = ClientRecv('localhost', 5550, self.name)
+            self.client.recvmsg.connect(self.printMsg)
+            self.client.start()
 
     def send(self):
-        text = self.txtInput.text()
-        self.txtBrowser.append(text)
-        self.txtBrowser.update()
-        self.txtInput.setText("")
         self.txtInput.setFocus()
+        if self.txtInput.text():
+            text = self.txtInput.text()
+            self.time = datetime.datetime.now()
+            self.time = self.time.strftime("%H:%M:%S")
+            self.txtBrowser.append("                  " + self.name + ": " + text + "[" + self.time + "]")
+            self.txtInput.setText("")
+            self.client.send(text)
 
-    def start(self):
-        myname = self.txtName.text()
-        self.btnLogin.setEnabled(False)
-        self.txtName.setEnabled(False)
-        self.btnSend.setEnabled(True)
-        self.txtInput.setEnabled(True)
-        c = Client('localhost', 5550,self)
-        th1 = threading.Thread(target=c.sendThreadFunc)
-        th2 = threading.Thread(target=c.recvThreadFunc)
-        threads = [th1, th2]
-        #for t in threads:
-            #t.setDaemon(True)
-            #t.start()
-        #t.join()
+    def printMsg(self, data):
+        self.time = datetime.datetime.now()
+        self.time = self.time.strftime("%H:%M:%S")
+        self.txtBrowser.append(data + "[" + str(self.time) + "]")
+
 
 if __name__ == "__main__":
     app = QApplication(sys.argv)
-    MainWindow=Main()
+    MainWindow = MainWindow()
     MainWindow.show()
     sys.exit(app.exec_())
