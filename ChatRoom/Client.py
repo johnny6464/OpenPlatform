@@ -69,7 +69,7 @@ class MainWindow(QMainWindow, mainwindow.Ui_MainWindow):
             text = self.txtInput.text()
             self.time = datetime.datetime.now()
             self.time = self.time.strftime("%H:%M:%S")
-            self.txtBrowser.append("                  " + self.name + ": " + text + "[" + self.time + "]")
+            self.txtBrowser.append("                                                    " + self.name + ": " + text + "[" + self.time + "]")
             self.txtInput.setText("")
             self.client.send(text)
 

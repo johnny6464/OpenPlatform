@@ -56,7 +56,7 @@ class Server:
             except (OSError, ConnectionResetError):
                 try:
                     self.mylist.remove(myconnection)
-                    self.tellOthers(connNumber, name + ' is out',name)
+                    self.tellOthers(connNumber, 'SYSTEM: ' + name + ' is out', name, True)
                 except:
                     pass
 
