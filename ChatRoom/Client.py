@@ -1,5 +1,4 @@
 import socket
-import threading
 import datetime
 import mainwindow
 import sys
@@ -76,7 +75,9 @@ class MainWindow(QMainWindow, mainwindow.Ui_MainWindow):
     def printMsg(self, data):
         self.time = datetime.datetime.now()
         self.time = self.time.strftime("%H:%M:%S")
-        self.txtBrowser.append(data + "[" + str(self.time) + "]")
+        if data[:-1]:
+            self.txtBrowser.append(data[:-1] + "[" + str(self.time) + "]")
+        self.txtUsers.setText(data[-1:])
 
 
 if __name__ == "__main__":

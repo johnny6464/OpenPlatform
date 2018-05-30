@@ -30,33 +30,43 @@ class Server:
             pass
 
     # send whatToSay to every except people in exceptNum
-    def tellOthers(self, exceptNum, whatToSay, name, issystem):
+    def tellOthers(self, exceptNum, whatToSay, name, issystem, onlineusers):
         for c in self.mylist:
-            if c.fileno() != exceptNum:
-                if(issystem):
-                    c.send(whatToSay.encode())
-                else:
+            if issystem:
+                if c.fileno() != exceptNum:
                     try:
-                        c.send(name.encode() + b': ' + whatToSay.encode())
+                        c.send(whatToSay.encode() + onlineusers.encode())
                     except:
                         pass
-
+                else:
+                    try:
+                        c.send(onlineusers.encode())
+                    except:
+                        pass
+            else:
+                if c.fileno() != exceptNum:
+                    try:
+                        c.send(name.encode() + b': ' + whatToSay.encode() + onlineusers.encode())
+                    except:
+                        pass
+                else:
+                    pass
     def subThreadIn(self, myconnection, connNumber):
         self.mylist.append(myconnection)
         name = myconnection.recv(1024).decode()
-        self.tellOthers(connNumber, 'SYSTEM: ' + name + ' is in the chat room', name, True)
+        self.tellOthers(connNumber, 'SYSTEM: ' + name + ' is in the chat room', name, True, str(len(self.mylist)))
         while True:
             try:
                 recvedMsg = myconnection.recv(1024).decode()
                 if recvedMsg:
-                    self.tellOthers(connNumber, recvedMsg, name, False)
+                    self.tellOthers(connNumber, recvedMsg, name, False, str(len(self.mylist)))
                 else:
                     pass
 
             except (OSError, ConnectionResetError):
                 try:
                     self.mylist.remove(myconnection)
-                    self.tellOthers(connNumber, 'SYSTEM: ' + name + ' is out', name, True)
+                    self.tellOthers(connNumber, 'SYSTEM: ' + name + ' is out', name, True, str(len(self.mylist)))
                 except:
                     pass
 
