@@ -34,7 +34,7 @@ class Server(QThread):
                 mythread.setDaemon(True)
                 mythread.start()
             else:
-                connection.send(b'please go out!')
+                connection.send(b'please go out!')g
                 connection.close()
         except:
             pass
