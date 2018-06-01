@@ -8,15 +8,20 @@ import serverwindow
 import sys
 
 
-class Server:
+class Server(QThread):
     def __init__(self, host, port):
+        QThread.__init__(self)
         sock = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
         self.sock = sock
         self.sock.bind((host, port))
         self.sock.listen(5)
         print('Server', socket.gethostbyname(host), 'listening ...')
         self.mylist = list()
-
+	
+    def run(self):
+        while True:
+            self.checkConnection()
+	
     def checkConnection(self):
         connection, addr = self.sock.accept()
         print('Accept a new connection', connection.getsockname(), connection.fileno())
@@ -77,17 +82,22 @@ class Server:
                 myconnection.close()
                 return
 
-
-def main():
-    s = Server('localhost', 5550)
-    while True:
-        s.checkConnection()
-
-
 class MainWindow(QMainWindow, serverwindow.Ui_MainWindow):
     def __init__(self):
         super(self.__class__, self).__init__()
         self.setupUi(self)
+        self.add_Button.clicked.connect(self.add)
+        self.client = Server('localhost',5550)
+        self.client.start()
+    
+    def add(self):
+        if self.nickname_lineEdit.text() and self.password_lineEdit.text():
+            text = self.nickname_lineEdit.text()
+            self.nickname_lineEdit.setText("")
+            text2 = self.password_lineEdit.text()
+            self.password_lineEdit.setText("")
+            self.member_list.append(text)
+			
 
 
 if __name__ == "__main__":
@@ -95,5 +105,4 @@ if __name__ == "__main__":
     MainWindow = MainWindow()
     MainWindow.show()
     sys.exit(app.exec_())
-    #main()
 

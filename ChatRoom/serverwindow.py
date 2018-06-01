@@ -24,7 +24,7 @@ class Ui_MainWindow(object):
         self.add_Button.setGeometry(QtCore.QRect(10, 70, 341, 41))
         self.add_Button.setObjectName("add_Button")
         self.add_Button.setStyleSheet("background-color: #FFD700;")
-        self.member_list = QtWidgets.QListView(self.centralwidget)
+        self.member_list = QtWidgets.QTextBrowser(self.centralwidget)
         self.member_list.setGeometry(QtCore.QRect(10, 120, 341, 211))
         self.member_list.setObjectName("member_list")
         self.del_button = QtWidgets.QPushButton(self.centralwidget)
