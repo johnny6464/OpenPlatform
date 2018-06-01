@@ -7,6 +7,7 @@
 # WARNING! All changes made in this file will be lost!
 
 from PyQt5 import QtCore, QtGui, QtWidgets
+from PyQt5.QtWidgets import QLineEdit
 
 class Ui_MainWindow(object):
     def setupUi(self, MainWindow):
@@ -37,6 +38,7 @@ class Ui_MainWindow(object):
         self.password_lineEdit = QtWidgets.QLineEdit(self.centralwidget)
         self.password_lineEdit.setGeometry(QtCore.QRect(240, 30, 113, 30))
         self.password_lineEdit.setObjectName("password_lineEdit")
+        self.password_lineEdit.setEchoMode(QLineEdit.Password)
         MainWindow.setCentralWidget(self.centralwidget)
         self.menubar = QtWidgets.QMenuBar(MainWindow)
         self.menubar.setGeometry(QtCore.QRect(0, 0, 370, 22))

@@ -33,7 +33,6 @@ class Ui_MainWindow(object):
         self.lblUsers = QtWidgets.QLabel(self.centralwidget)
         self.lblUsers.setGeometry(QtCore.QRect(10, 0, 440, 30))
         self.lblUsers.setObjectName("lblUsers")
-        self.lblUsers.setStyleSheet("text-align: center;")
         self.lblCPwd = QtWidgets.QLabel(self.centralwidget)
         self.lblCPwd.setGeometry(QtCore.QRect(10, 60, 90, 30))
         self.lblCPwd.setObjectName("lblCPwd")

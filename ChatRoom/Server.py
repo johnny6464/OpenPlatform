@@ -62,7 +62,7 @@ class Server(QThread):
                     pass
     def subThreadIn(self, myconnection, connNumber):
         self.mylist.append(myconnection)
-        name = myconnection.recv(1024).decode()
+        name, password = myconnection.recv(1024).decode().split('|')
         self.tellOthers(connNumber, 'SYSTEM: ' + name + ' is in the chat room', name, True, str(len(self.mylist)))
         while True:
             try:
@@ -97,7 +97,6 @@ class MainWindow(QMainWindow, serverwindow.Ui_MainWindow):
             text2 = self.password_lineEdit.text()
             self.password_lineEdit.setText("")
             self.member_list.append(text)
-			
 
 
 if __name__ == "__main__":
