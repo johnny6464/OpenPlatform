@@ -2,6 +2,10 @@
 import socket
 import threading
 from time import gmtime, strftime
+from PyQt5.QtWidgets import QMainWindow, QApplication
+from PyQt5.QtCore import QThread, pyqtSignal
+import serverwindow
+import sys
 
 
 class Server:
@@ -80,6 +84,16 @@ def main():
         s.checkConnection()
 
 
+class MainWindow(QMainWindow, serverwindow.Ui_MainWindow):
+    def __init__(self):
+        super(self.__class__, self).__init__()
+        self.setupUi(self)
+
+
 if __name__ == "__main__":
-    main()
+    app = QApplication(sys.argv)
+    MainWindow = MainWindow()
+    MainWindow.show()
+    sys.exit(app.exec_())
+    #main()
 
