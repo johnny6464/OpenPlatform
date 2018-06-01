@@ -63,7 +63,7 @@ class Server(QThread):
                     pass
     def subThreadIn(self, myconnection, connNumber):
         self.mylist.append(myconnection)
-        name = myconnection.recv(1024).decode()
+        name, password = myconnection.recv(1024).decode().split('|')
         self.tellOthers(connNumber, 'SYSTEM: ' + name + ' is in the chat room', name, True, str(len(self.mylist)))
         while True:
             try:
