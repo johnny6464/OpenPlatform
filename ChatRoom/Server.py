@@ -6,6 +6,7 @@ from PyQt5.QtWidgets import QMainWindow, QApplication
 from PyQt5.QtCore import QThread, pyqtSignal
 import serverwindow
 import sys
+from pymongo import MongoClient
 
 
 class Server(QThread):
@@ -96,8 +97,12 @@ class MainWindow(QMainWindow, serverwindow.Ui_MainWindow):
             self.nickname_lineEdit.setText("")
             text2 = self.password_lineEdit.text()
             self.password_lineEdit.setText("")
-            self.member_list.append(text)
-			
+            mclient = MongoClient("localhost", 27017)
+            db = mclient["chatroom"]
+            collection = db["chatroom"]
+            collection.insert_one({'uname': text, 'upwd': text2})
+            for ii in collection.find({},{'uname':1,'_id':0}):
+                self.member_list.append(str(ii))
 
 
 if __name__ == "__main__":
