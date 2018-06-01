@@ -41,6 +41,7 @@ class MainWindow(QMainWindow, mainwindow.Ui_MainWindow):
         super(self.__class__, self).__init__()
         self.setupUi(self)
         self.name = None
+        self.password = None
         self.client = None
         self.time = None
         self.btnLogin.clicked.connect(self.login)
@@ -49,8 +50,9 @@ class MainWindow(QMainWindow, mainwindow.Ui_MainWindow):
 
     def login(self):
         self.txtName.setFocus()
-        if self.txtName.text():
+        if self.txtName.text() and self.txtPwd.text():
             self.name = self.txtName.text()
+            self.password = self.txtPwd.text()
             self.btnLogin.setEnabled(False)
             self.txtName.setEnabled(False)
             self.txtPwd.setEnabled(False)
@@ -61,7 +63,7 @@ class MainWindow(QMainWindow, mainwindow.Ui_MainWindow):
             self.txtInput.setFocus()
             self.txtBrowser.append("Welcome to chat room! " + self.name)
             self.txtBrowser.append("Now Lets Chat,  " + self.name)
-            self.client = ClientRecv('localhost', 5550, self.name)
+            self.client = ClientRecv('localhost', 5550, self.name + "|" + self.password)
             self.client.recvmsg.connect(self.printMsg)
             self.client.start()
 
@@ -71,7 +73,7 @@ class MainWindow(QMainWindow, mainwindow.Ui_MainWindow):
             text = self.txtInput.text()
             self.time = datetime.datetime.now()
             self.time = self.time.strftime("%H:%M:%S")
-            self.txtBrowser.append("                                                    " + self.name + ": " + text + "[" + self.time + "]")
+            self.txtBrowser.append("                                                                                                     " + self.name + ": " + text + "[" + self.time + "]")
             self.txtInput.setText("")
             self.client.send(text)
 
@@ -80,7 +82,7 @@ class MainWindow(QMainWindow, mainwindow.Ui_MainWindow):
         self.time = self.time.strftime("%H:%M:%S")
         if data[:-1]:
             self.txtBrowser.append(data[:-1] + "[" + str(self.time) + "]")
-        self.txtUsers.setText(data[-1:])
+        self.lblUsers.setText("                                                       目前聊天室有" + data[-1:] + "人")
 
 
 if __name__ == "__main__":

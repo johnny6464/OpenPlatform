@@ -7,6 +7,7 @@
 # WARNING! All changes made in this file will be lost!
 
 from PyQt5 import QtCore, QtGui, QtWidgets
+from PyQt5.QtWidgets import QLineEdit
 
 class Ui_MainWindow(object):
     def setupUi(self, MainWindow):
@@ -30,8 +31,9 @@ class Ui_MainWindow(object):
         self.lblName.setGeometry(QtCore.QRect(10, 30, 71, 30))
         self.lblName.setObjectName("lblName")
         self.lblUsers = QtWidgets.QLabel(self.centralwidget)
-        self.lblUsers.setGeometry(QtCore.QRect(10, 0, 71, 30))
+        self.lblUsers.setGeometry(QtCore.QRect(10, 0, 440, 30))
         self.lblUsers.setObjectName("lblUsers")
+        self.lblUsers.setStyleSheet("text-align: center;")
         self.lblCPwd = QtWidgets.QLabel(self.centralwidget)
         self.lblCPwd.setGeometry(QtCore.QRect(10, 60, 90, 30))
         self.lblCPwd.setObjectName("lblCPwd")
@@ -41,14 +43,12 @@ class Ui_MainWindow(object):
         self.txtPwd = QtWidgets.QLineEdit(self.centralwidget)
         self.txtPwd.setGeometry(QtCore.QRect(220, 30, 130, 30))
         self.txtPwd.setObjectName("txtPwd")
+        self.txtPwd.setEchoMode(QLineEdit.Password)
         self.txtCPwd = QtWidgets.QLineEdit(self.centralwidget)
         self.txtCPwd.setGeometry(QtCore.QRect(100, 60, 120, 30))
         self.txtCPwd.setObjectName("txtCPwd")
         self.txtCPwd.setDisabled(True)
-        self.txtUsers = QtWidgets.QLineEdit(self.centralwidget)
-        self.txtUsers.setGeometry(QtCore.QRect(85, 0, 135, 30))
-        self.txtUsers.setObjectName("txtUsers")
-        self.txtUsers.setDisabled(True)
+        self.txtCPwd.setEchoMode(QLineEdit.Password)
         self.btnLogin = QtWidgets.QPushButton(self.centralwidget)
         self.btnLogin.setGeometry(QtCore.QRect(350, 30, 100, 30))
         self.btnLogin.setObjectName("btnLogin")
@@ -80,6 +80,6 @@ class Ui_MainWindow(object):
         self.btnUpwd.setText(_translate("MainWindow", "Update Password"))
         self.lblName.setText(_translate("MainWindow", "NickName:"))
         self.btnLogin.setText(_translate("MainWindow", "Login"))
-        self.lblUsers.setText(_translate("MainWindow", "OnlineUsers:"))
+        self.lblUsers.setText(_translate("MainWindow", "                                                       目前聊天室有0人"))
         self.lblCPwd.setText(_translate("MainWindow", "Change Password:"))
 
